@@ -91,8 +91,9 @@ while (running):
         if (bullet.x > 400):
             bulletList.remove(bullet)
     # Check game over
-    if score <= 0:
+    if lives <= 0:
         print("Game Over Event.")
+        break
  
 
     # Clear and Render screen
