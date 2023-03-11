@@ -92,7 +92,7 @@ while (running):
             bulletList.remove(bullet)
     # Check game over
     if score <= 0:
-        print("Game Over Event.")
+        print("Game Over Event")
  
 
     # Clear and Render screen
