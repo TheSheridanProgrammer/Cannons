@@ -13,6 +13,8 @@ targetList = []
 
 gameOver = False
 
+fpsDisplay = False
+
 class Bullet:
     def __init__(self, x, y):
         self.x = x
@@ -67,11 +69,16 @@ while (running):
             print(event)
             running = False
         elif (event.type == pg.KEYUP):
-            print(event)
-            bulletList.append(Bullet(playerx, playery))
+            if (event.key == pg.K_SPACE):
+                print(event)
+                bulletList.append(Bullet(playerx, playery))
+            elif (event.key == pg.K_TAB):
+                fpsDisplay = True
+                print("FPS displayed.")
 
     # Update Engine State
     clock.tick(60)
+    fps = clock.get_fps()
     if gameOver == False:
         spawner.Spawn(deltaTime)
         for bullet in bulletList:
@@ -111,6 +118,9 @@ while (running):
         label2 = myfont.render("Lives: " + str(lives), 1, (255, 255, 255))
         screen.blit(label, (20, 10))
         screen.blit(label2, (270, 10))
+        if fpsDisplay == True:
+            label3 = myfont.render("FPS: " + str(int(fps)), 1, (255, 255, 255))
+            screen.blit(label3, (145, 10))
         pg.display.flip()
     else:
         screen.fill((0, 0, 0))
