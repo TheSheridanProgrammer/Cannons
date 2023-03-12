@@ -11,6 +11,8 @@ lives = 10
 bulletList = [] 
 targetList = []
 
+gameOver = False
+
 class Bullet:
     def __init__(self, x, y):
         self.x = x
@@ -70,44 +72,53 @@ while (running):
 
     # Update Engine State
     clock.tick(60)
-    spawner.Spawn(deltaTime)
-    for bullet in bulletList:
-        bullet.update(deltaTime)
-    for target in targetList:
-        target.update(deltaTime)
-    # Check collisions
-    for bullet in bulletList:
+    if gameOver == False:
+        spawner.Spawn(deltaTime)
+        for bullet in bulletList:
+            bullet.update(deltaTime)
         for target in targetList:
-            if pg.draw.circle(screen, pg.Color(255, 255, 255), (bullet.x, bullet.y), 10).contains(pg.draw.rect(screen, pg.Color(255, 255, 255), pg.Rect(target.x, target.y, 10, 10))):
+            target.update(deltaTime)
+        # Check collisions
+        for bullet in bulletList:
+            for target in targetList:
+                if pg.draw.circle(screen, pg.Color(255, 255, 255), (bullet.x, bullet.y), 10).contains(pg.draw.rect(screen, pg.Color(255, 255, 255), pg.Rect(target.x, target.y, 10, 10))):
+                    targetList.remove(target)
+                    score += 1
+                    print("collision")
+        # Destroy targets that are out of bound
+        for target in targetList:
+            if (target.y > 400):
                 targetList.remove(target)
-                score += 1
-                print("collision")
-    # Destroy targets that are out of bound
-    for target in targetList:
-        if (target.y > 400):
-            targetList.remove(target)
-            lives -= 1
-    for bullet in bulletList:
-        if (bullet.x > 400):
-            bulletList.remove(bullet)
-    # Check game over
-    if lives <= 0:
-        print("Game Over Event.")
-        break
+                lives -= 1
+        for bullet in bulletList:
+            if (bullet.x > 400):
+                bulletList.remove(bullet)
+        # Check game over
+        if lives <= 0:
+            gameOver = True
+            print("Game Over Event.")
  
 
     # Clear and Render screen
-    screen.fill((0, 0, 0))
-    pg.draw.rect(screen, pg.Color(255, 255, 255), pg.Rect(playerx, playery, 50, 50))
-    for target in targetList:
-        pg.draw.rect(screen, pg.Color(255, 255, 255), pg.Rect(target.x, target.y, 10, 10))
-    for bullet in bulletList:
-        pg.draw.circle(screen, pg.Color(255, 255, 255), (bullet.x, bullet.y), 10)
-    label = myfont.render("Score: " + str(score), 1, (255, 255, 255))
-    label2 = myfont.render("Lives: " + str(lives), 1, (255, 255, 255))
-    screen.blit(label, (20, 10))
-    screen.blit(label2, (270, 10))
-    pg.display.flip()
+    if gameOver == False:
+        screen.fill((0, 0, 0))
+        pg.draw.rect(screen, pg.Color(255, 255, 255), pg.Rect(playerx, playery, 50, 50))
+        for target in targetList:
+            pg.draw.rect(screen, pg.Color(255, 255, 255), pg.Rect(target.x, target.y, 10, 10))
+        for bullet in bulletList:
+            pg.draw.circle(screen, pg.Color(255, 255, 255), (bullet.x, bullet.y), 10)
+        label = myfont.render("Score: " + str(score), 1, (255, 255, 255))
+        label2 = myfont.render("Lives: " + str(lives), 1, (255, 255, 255))
+        screen.blit(label, (20, 10))
+        screen.blit(label2, (270, 10))
+        pg.display.flip()
+    else:
+        screen.fill((0, 0, 0))
+        label = myfont.render("Score: " + str(score), 1, (255, 255, 255))
+        label2 = myfont.render("Lives: " + str(lives), 1, (255, 255, 255))
+        screen.blit(label, (20, 10))
+        screen.blit(label2, (270, 10))
+        pg.display.flip()
 
 # Terminate pygame and display ending message
 pg.quit()
