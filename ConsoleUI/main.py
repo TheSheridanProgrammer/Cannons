@@ -15,6 +15,8 @@ gameOver = False
 
 fpsDisplay = False
 
+mousePosition = 0
+
 class Bullet:
     def __init__(self, x, y):
         self.x = x
@@ -51,7 +53,7 @@ clock = pg.time.Clock()
 initialTime = time.time()
 
 # Set the scene
-pg.draw.rect(screen, pg.Color(255, 255, 255), pg.Rect(playerx, playery, 500, 500))
+pg.draw.rect(screen, pg.Color(255, 255, 255), pg.Rect(playerx, playery, 50, 50))
 spawner = Spawner()
 myfont = pg.font.SysFont("monospace", 20)
 
@@ -75,6 +77,13 @@ while (running):
             elif (event.key == pg.K_TAB):
                 fpsDisplay = True
                 print("FPS displayed.")
+        elif pg.mouse.get_pressed()[0]:
+                mousePosition = pg.mouse.get_pos()
+                if gameOver == True:
+                    if pg.Rect(100, 100, 100, 50).collidepoint(mousePosition):
+                        gameOver = False
+                        lives = 10
+                        print("Button Clicked!")
 
     # Update Engine State
     clock.tick(60)
@@ -101,7 +110,7 @@ while (running):
             if (bullet.x > 400):
                 bulletList.remove(bullet)
         # Check game over
-        if lives <= 0:
+        if lives <= 9:
             gameOver = True
             print("Game Over Event.")
  
@@ -124,10 +133,16 @@ while (running):
         pg.display.flip()
     else:
         screen.fill((0, 0, 0))
+        # Display button
+        pg.draw.rect(screen, pg.Color(255, 255, 255), pg.Rect(100, 100, 100, 50))
+        btnLabel = myfont.render("Replay!", 1, (0, 0, 255))
+        screen.blit(btnLabel, (100, 100))
+        # Display scores
         label = myfont.render("Score: " + str(score), 1, (255, 255, 255))
         label2 = myfont.render("Lives: " + str(lives), 1, (255, 255, 255))
         screen.blit(label, (20, 10))
         screen.blit(label2, (270, 10))
+        # Refresh the screen
         pg.display.flip()
 
 # Terminate pygame and display ending message
