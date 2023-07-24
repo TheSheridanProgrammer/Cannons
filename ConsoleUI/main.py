@@ -9,6 +9,7 @@ playery = 350
 score = 0
 lives = 10
 
+# Game state data
 bulletList = [] 
 targetList = []
 
