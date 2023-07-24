@@ -2,6 +2,7 @@ import pygame as pg
 import time
 
 #-------------Engine Code---------------#
+# Player data
 playerx = 50
 playery = 350
 
