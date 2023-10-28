@@ -48,7 +48,7 @@ class Spawner:
 
 #-------------Main Driver Code---------------#
 
-# Initialize pygame
+# Initialize pygame and game variables
 pg.init()
 screen = pg.display.set_mode((400, 400))
 clock = pg.time.Clock()
